@@ -15,10 +15,11 @@
  */
 package org.springframework.data.jpa.domain.sample;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.lang.Nullable;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -114,6 +115,13 @@ public class User {
 
 	@Temporal(TemporalType.DATE) private Date dateOfBirth;
 
+	@Temporal(TemporalType.TIMESTAMP) //
+	private @Nullable
+	Date createdDate;
+
+//	@ManyToOne //
+//	private @Nullable User createdBy;
+
 	/**
 	 * Creates a new empty instance of {@code User}.
 	 */
@@ -140,6 +148,40 @@ public class User {
 		this.attributes = new HashSet<String>();
 		this.createdAt = new Date();
 	}
+
+//	/*
+//	 * (non-Javadoc)
+//	 * @see org.springframework.data.domain.Auditable#getCreatedBy()
+//	 */
+//	public Optional<User> getCreatedBy() {
+//		return Optional.ofNullable(createdBy);
+//	}
+
+//	/*
+//	 * (non-Javadoc)
+//	 * @see org.springframework.data.domain.Auditable#setCreatedBy(java.lang.Object)
+//	 */
+//	public void setCreatedBy(User createdBy) {
+//		this.createdBy = createdBy;
+//	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.domain.Auditable#getCreatedDate()
+	 */
+	public Optional<LocalDateTime> getCreatedDate() {
+		return null == createdDate ? Optional.empty()
+				: Optional.of(LocalDateTime.ofInstant(createdDate.toInstant(), ZoneId.systemDefault()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.domain.Auditable#setCreatedDate(java.time.temporal.TemporalAccessor)
+	 */
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = Date.from(createdDate.atZone(ZoneId.systemDefault()).toInstant());
+	}
+
 
 	/**
 	 * @return the id

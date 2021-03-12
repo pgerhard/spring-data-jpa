@@ -1754,6 +1754,19 @@ public class UserRepositoryTests {
 		assertThat(users).hasSize(4);
 	}
 
+	@Test
+	void findAllByExampleWithEmptyProbeAndIgnoringNullValues () {
+		flushTestUsers();
+
+		User prototype = new User();
+		prototype.setCreatedAt(null);
+
+		List<User> users = repository
+				.findAll(of(prototype, ExampleMatcher.matching().withIgnoreNullValues().withIgnorePaths("age", "createdAt", "active")));
+
+		assertThat(users).hasSize(4);
+	}
+
 	@Test // DATAJPA-218
 	void findAllByNullExample() {
 		assertThatExceptionOfType(InvalidDataAccessApiUsageException.class)
